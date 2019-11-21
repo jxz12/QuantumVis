@@ -92,10 +92,10 @@ public class Gate : MonoBehaviour, IDropHandler
     static Dictionary<Type, string> symbols = new Dictionary<Type, string>()
     {
         { Type.Identity, "I" },
-        { Type.PauliX, "N" },
+        { Type.PauliX, "X" },
         { Type.Hadamard, "H" },
         { Type.C, "C" },
-        { Type.NOT, "N" },
+        { Type.NOT, "X" },
     };
     public event Action OnDropped;
     [SerializeField] TMPro.TextMeshProUGUI topText, botText;
