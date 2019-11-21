@@ -6,28 +6,29 @@ using UnityEngine.UI;
 
 public class Circuit : MonoBehaviour
 {
+    List<Input> inputs;
     List<Gate> gates;
 
-    [SerializeField] Toggle qubit1, qubit2;
     [SerializeField] TMPro.TextMeshProUGUI result;
+    public bool qubit0 { get; set; }
+    public bool qubit1 { get; set; }
 
     void Start()
     {
-        qubit1.onValueChanged.AddListener(b=>Run());
-        qubit2.onValueChanged.AddListener(b=>Run());
+        inputs = new List<Input>(transform.GetComponentsInChildren<Input>());
+        foreach (var input in inputs)
+            input.OnSet += Run;
 
         gates = new List<Gate>(transform.GetComponentsInChildren<Gate>());
         foreach (var gate in gates)
-        {
             gate.OnDropped += Run;
-        }
 
         Run();
     }
     public void Run()
     {
         // initialise first gate
-        int input = (qubit1.isOn?2:0) + (qubit2.isOn?1:0);
+        int input = (inputs[0].state?2:0) + (inputs[1].state?1:0);
 
         gates[0].input = new Complex[] { 0,0,0,0 };
         gates[0].input[input] = 1;

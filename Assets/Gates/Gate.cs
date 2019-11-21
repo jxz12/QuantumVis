@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Gate : MonoBehaviour, IDropHandler
 {
-    // TODO: make this any size input maybe
+    // TODO: make this any size input
     public Complex[] input { get; set; } = new Complex[4];
     public Complex[] output { get; private set; } = new Complex[4];
     public Complex[,] matrix { get; private set; }
@@ -157,10 +157,22 @@ public class Gate : MonoBehaviour, IDropHandler
 
         for (int i=0; i<4; i++)
         {
-            float inProb = (float)(input[i].Magnitude * input[i].Magnitude);
-            inputSquares[i].color = new Color(inProb, inProb, inProb);
-            float outProb = (float)(output[i].Magnitude * output[i].Magnitude);
-            outputSquares[i].color = new Color(outProb, outProb, outProb);
+            // TODO: complex numbers will look different
+            float inProb = (float)input[i].Real;
+            if (inProb > 0)
+                inputSquares[i].color = new Color(0, inProb, 0);
+            else if (inProb < 0)
+                inputSquares[i].color = new Color(-inProb, 0, 0);
+            else
+                inputSquares[i].color = Color.black;
+
+            float outProb = (float)output[i].Real;
+            if (outProb > 0)
+                outputSquares[i].color = new Color(0, outProb, 0);
+            else if (outProb < 0)
+                outputSquares[i].color = new Color(-outProb, 0, 0);
+            else
+                outputSquares[i].color = Color.black;
         }
     }
 }
