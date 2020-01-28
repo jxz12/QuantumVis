@@ -10,6 +10,7 @@ sysinfo.txt
 *.stackdump
 
 .vscode/
+TextMesh\ Pro/
  
 # ============================================= #
 # Visual Studio / MonoDevelop / Rider generated #
