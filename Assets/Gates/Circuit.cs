@@ -61,14 +61,14 @@ public class Circuit : MonoBehaviour
         {
             // yes this is brute force but I am pragmatic
             var xSnaps = new float[2*gates.Count + 1];
-            xSnaps[0] = (xMin + gates[0].transform.position.x) / 2;
+            xSnaps[0] = (xMin+gatesLayout.padding.left + gates[0].transform.position.x) / 2;
             xSnaps[1] = gates[0].transform.position.x;
             for (int i=1; i<gates.Count; i++)
             {
                 xSnaps[i*2] = (gates[i-1].transform.position.x + gates[i].transform.position.x) / 2;
                 xSnaps[i*2+1] = gates[i].transform.position.x;
             }
-            xSnaps[2*gates.Count] = (gates[gates.Count-1].transform.position.x + xMax) / 2;
+            xSnaps[2*gates.Count] = (gates[gates.Count-1].transform.position.x + xMax-gatesLayout.padding.right) / 2;
 
             snappedSectionX = 0;
             snappedPosX = xSnaps[0];
@@ -133,9 +133,9 @@ public class Circuit : MonoBehaviour
         // {
         //     gate.transform.SetAsLastSibling();
         // }
-        float n = (float)gates.Count;
-        float layoutBorder = n<=1? 0 : (1/(n+1) - 1/(2*n)) / (1 - 1/n);
-        gatesLayout.padding.left = gatesLayout.padding.right = (int)(layoutBorder * xRange);
+        // float n = (float)gates.Count;
+        // float layoutBorder = n<=1? 0 : (1/(n+1) - 1/(2*n)) / (1 - 1/n);
+        // gatesLayout.padding.left = gatesLayout.padding.right = (int)(layoutBorder * xRange);
         Run();
     }
     public void Run()
