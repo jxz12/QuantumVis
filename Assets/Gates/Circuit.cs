@@ -61,7 +61,7 @@ public class Circuit : MonoBehaviour
         int nSlotsY = (pickup.type==Gate.Type.C || pickup.type==Gate.Type.NOT)? 1 : 2;
         snappedSectionY = (int)Mathf.Round(yViewport * (nSlotsY-1));
 
-        float snappedPosX = nSlotsX==1? .5f : (float)snappedSectionX / (nSlotsX-1);
+        float snappedPosX = nSlotsX<=1? .5f : (float)snappedSectionX / (nSlotsX-1);
         float snappedPosY = nSlotsY==1? .5f : .25f + .5f*snappedSectionY / (nSlotsY-1);
         snappedPosX = xMin + snappedPosX*(xMax-xMin);
         snappedPosY = yMin + snappedPosY*(yMax-yMin);
