@@ -1,25 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Pickup : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Gate.Type type;
+    public event Action<PointerEventData> OnDragged;
+    public event Action<PointerEventData> OnDropped;
 
     Vector2 originalPos;
     public void OnDrag(PointerEventData ped)
     {
-        transform.position = ped.position;
+        OnDragged?.Invoke(ped);
     }
     public void OnBeginDrag(PointerEventData ped)
     {
         GetComponent<CanvasGroup>().blocksRaycasts = false;
-        GetComponent<CanvasGroup>().alpha = .7f;
         originalPos = transform.position;
     }
     public void OnEndDrag(PointerEventData ped)
     {
         GetComponent<CanvasGroup>().blocksRaycasts = true;
-        GetComponent<CanvasGroup>().alpha = 1;
         transform.position = originalPos;
+        OnDropped?.Invoke(ped);
+    }
+    public float Alpha {
+        get { return GetComponent<CanvasGroup>().alpha; }
+        set { GetComponent<CanvasGroup>().alpha = value; }
     }
 }

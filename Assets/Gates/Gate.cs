@@ -2,9 +2,9 @@
 using System.Numerics;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Gate : MonoBehaviour, IDropHandler
+public class Gate : MonoBehaviour
 {
     // TODO: make this any size input
     public Complex[] input { get; set; } = new Complex[4];
@@ -97,82 +97,92 @@ public class Gate : MonoBehaviour, IDropHandler
         { Type.C, "C" },
         { Type.NOT, "X" },
     };
-    public event Action OnDropped;
-    [SerializeField] TMPro.TextMeshProUGUI topText, botText;
-    [SerializeField] UnityEngine.UI.Image bridge;
-    [SerializeField] UnityEngine.UI.Image[] inputSquares;
-    [SerializeField] UnityEngine.UI.Image[] outputSquares;
-    public void OnDrop(PointerEventData ped)
+    public bool SetType(Type newType, bool topHalf)
     {
-        var pickup = ped.pointerDrag.GetComponent<Pickup>();
-        if (pickup != null)
+        if (newType == Type.C)
         {
-            if (pickup.type == Type.C)
+            topType = Type.C;
+            botType = Type.NOT;
+            // topText.text = symbols[Type.C];
+            // botText.text = symbols[Type.NOT];
+            bridge.enabled = true;
+        }
+        else if (newType == Type.NOT)
+        {
+            topType = Type.NOT;
+            botType = Type.C;
+            // topText.text = symbols[Type.NOT];
+            // botText.text = symbols[Type.C];
+            bridge.enabled = true;
+        }
+        else
+        {
+            if (topHalf)
             {
-                topType = Type.C;
-                botType = Type.NOT;
-                topText.text = symbols[Type.C];
-                botText.text = symbols[Type.NOT];
-                bridge.enabled = true;
-            }
-            else if (pickup.type == Type.NOT)
-            {
-                topType = Type.NOT;
-                botType = Type.C;
-                topText.text = symbols[Type.NOT];
-                botText.text = symbols[Type.C];
-                bridge.enabled = true;
+                topType = newType;
+                if (botType == Type.C || botType == Type.NOT) {
+                    // topText.text = symbols[Type.Identity];
+                    botType = Type.Identity;
+                }
             }
             else
             {
-                if (transform.InverseTransformPoint(ped.position).y > 0)
-                {
-                    topType = pickup.type;
-                    topText.text = symbols[pickup.type];
-                    if (botType == Type.C || botType == Type.NOT)
-                    {
-                        botType = Type.Identity;
-                        botText.text = symbols[Type.Identity];
-                    }
+                botType = newType;
+                // botText.text = symbols[newType];
+                if (topType == Type.C || topType == Type.NOT) {
+                    // topText.text = symbols[Type.Identity];
+                    topType = Type.Identity;
                 }
-                else
-                {
-                    botType = pickup.type;
-                    botText.text = symbols[pickup.type];
-                    if (topType == Type.C || topType == Type.NOT)
-                    {
-                        topType = Type.Identity;
-                        topText.text = symbols[Type.Identity];
-                    }
-                }
-                bridge.enabled = false;
             }
+            bridge.enabled = false;
         }
-        OnDropped.Invoke();
+
+        // refresh appearance
+        if (botType == Type.Identity) {
+            botText.text = "";
+            botText.transform.parent.GetComponent<Image>().enabled = false;
+        } else {
+            botText.text = symbols[botType];
+            botText.transform.parent.GetComponent<Image>().enabled = true;
+        }
+        if (topType == Type.Identity) {
+            topText.text = "";
+            topText.transform.parent.GetComponent<Image>().enabled = false;
+        } else {
+            topText.text = symbols[topType];
+            topText.transform.parent.GetComponent<Image>().enabled = true;
+        }
+        return topType==Type.Identity && botType==Type.Identity;
     }
+    [SerializeField] TMPro.TextMeshProUGUI topText, botText;
+    [SerializeField] UnityEngine.UI.Image bridge;
+    [SerializeField] UnityEngine.UI.Image[] inputState;
+    [SerializeField] UnityEngine.UI.Image[] outputState;
     public void ColourInState()
     {
-        if (inputSquares.Length != input.Length || outputSquares.Length != output.Length)
+        if (inputState.Length != input.Length || outputState.Length != output.Length) {
             throw new Exception("wrong number of squares");
+        }
 
         for (int i=0; i<4; i++)
         {
             // TODO: complex numbers will look different
             float inProb = (float)input[i].Real;
-            if (inProb > 0)
-                inputSquares[i].color = new Color(0, inProb, 0);
-            else if (inProb < 0)
-                inputSquares[i].color = new Color(-inProb, 0, 0);
-            else
-                inputSquares[i].color = Color.black;
-
+            if (inProb > 0) {
+                inputState[i].color = new Color(0, inProb, 0);
+            } else if (inProb < 0) {
+                inputState[i].color = new Color(-inProb, 0, 0);
+            } else {
+                inputState[i].color = Color.black;
+            }
             float outProb = (float)output[i].Real;
-            if (outProb > 0)
-                outputSquares[i].color = new Color(0, outProb, 0);
-            else if (outProb < 0)
-                outputSquares[i].color = new Color(-outProb, 0, 0);
-            else
-                outputSquares[i].color = Color.black;
+            if (outProb > 0) {
+                outputState[i].color = new Color(0, outProb, 0);
+            } else if (outProb < 0) {
+                outputState[i].color = new Color(-outProb, 0, 0);
+            } else {
+                outputState[i].color = Color.black;
+            }
         }
     }
 }

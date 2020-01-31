@@ -8,7 +8,6 @@ public class Input : MonoBehaviour
     public bool state { get; private set; } = false;
     public void SetValue(bool newState)
     {
-        print(state+" "+newState);
         if (state && !newState)
         {
             digit0.text = "1";

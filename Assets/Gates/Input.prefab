@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 554495473293641496}
   - component: {fileID: 1101138264925905135}
   m_Layer: 5
-  m_Name: Wire 1
+  m_Name: Wire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 284.17502, y: 0}
-  m_SizeDelta: {x: 474.7, y: 15}
+  m_AnchoredPosition: {x: 322, y: 0}
+  m_SizeDelta: {x: 550.3, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2859873402675071473
 MonoBehaviour:
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
